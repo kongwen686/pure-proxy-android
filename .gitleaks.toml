@@ -1,0 +1,13 @@
+title = "Pure Proxy public source secret scan"
+
+[extend]
+useDefault = true
+
+# The verified SHA-256 of the official Xray AAR is a checksum, not a JFrog token.
+[[allowlists]]
+targetRules = ["jfrog-identity-token"]
+description = "Exact official native artifact checksum"
+condition = "AND"
+paths = ['''^NATIVE_PROVENANCE\.json$''']
+regexTarget = "line"
+regexes = ['''"xray_aar_sha256": "9c43748373cc9ef03ff020764ea4ea95185f901e17a61a090bda26fa3c9e4a07"''']

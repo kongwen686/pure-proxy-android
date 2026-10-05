@@ -1,0 +1,35 @@
+<resources>
+    <string name="chain_title">Proxy chain</string>
+    <string name="chain_description">Choose a relay and a fixed-IP exit. Settings apply to the selected group.</string>
+    <string name="chain_ungrouped">Ungrouped nodes</string>
+    <string name="chain_choose_node">Choose a node</string>
+    <string name="chain_group_value">Group: %1$s</string>
+    <string name="chain_entry_value">Relay: %1$s</string>
+    <string name="chain_exit_value">Exit: %1$s</string>
+    <string name="chain_previous_value">Optional front proxy: %1$s</string>
+    <string name="chain_mode_normal">Ordinary proxy (single hop)</string>
+    <string name="chain_mode_static">Static exit (proxy chain)</string>
+    <string name="chain_none">None</string>
+    <string name="chain_preview_title">Connection path</string>
+    <string name="chain_preview">Device → %1$s → %2$s → Website</string>
+    <string name="chain_preview_front">Device → %1$s → %2$s → %3$s → Website</string>
+    <string name="chain_scope">Only traffic routed through the proxy uses this chain. Direct and excluded-app rules still apply. A failed exit never falls back to the relay. Re-select a node if a subscription update replaces its identity.</string>
+    <string name="chain_empty">No supported relay in this group. Import a VLESS, Shadowsocks or SOCKS node first.</string>
+    <string name="chain_save">Save and select relay</string>
+    <string name="chain_saving">Saving…</string>
+    <string name="chain_saved">Saved. Return home and connect. If already connected, disconnect before reconnecting.</string>
+    <string name="chain_reload">Reload nodes</string>
+    <string name="chain_back">Return home</string>
+    <string name="chain_error_missing">Chain stopped: a required node was removed or replaced. Re-select it in Proxy chain.</string>
+    <string name="chain_error_ambiguous">Node alias is missing or duplicated. Select the exact node in Proxy chain.</string>
+    <string name="chain_error_fragment">Disable fragment mode before using a proxy chain.</string>
+    <string name="chain_error_unsupported">This chain supports VLESS, VMess, Shadowsocks, SOCKS, HTTP and Trojan only.</string>
+    <string name="chain_error_endpoint">Invalid chain node address or port. Edit the node first.</string>
+    <string name="chain_error_exit">Select a static exit node first.</string>
+    <string name="chain_error_loop">Relay, exit and optional front proxy must be different nodes.</string>
+    <string name="chain_error_balance">Automatic node balancing cannot discard a required chain. Use the relay directly.</string>
+    <string name="chain_error_group">Group changed or was removed. Reload and choose it again.</string>
+    <string name="chain_error_entry">Select an available relay node first.</string>
+    <string name="chain_error_load">Unable to load nodes. Reload to retry.</string>
+    <string name="chain_error_save">Unable to save settings. Reopen this page to check and retry.</string>
+</resources>

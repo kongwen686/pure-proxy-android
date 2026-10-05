@@ -1,0 +1,35 @@
+<resources>
+    <string name="chain_title">链式代理</string>
+    <string name="chain_description">选择中转节点和静态 IP 出口，设置应用于所选分组。</string>
+    <string name="chain_ungrouped">未分组节点</string>
+    <string name="chain_choose_node">选择节点</string>
+    <string name="chain_group_value">应用分组：%1$s</string>
+    <string name="chain_entry_value">中转节点：%1$s</string>
+    <string name="chain_exit_value">静态出口：%1$s</string>
+    <string name="chain_previous_value">可选前置代理：%1$s</string>
+    <string name="chain_mode_normal">普通代理（单节点）</string>
+    <string name="chain_mode_static">静态出口（链式代理）</string>
+    <string name="chain_none">不使用</string>
+    <string name="chain_preview_title">连接路径</string>
+    <string name="chain_preview">手机 → %1$s → %2$s → 目标网站</string>
+    <string name="chain_preview_front">手机 → %1$s → %2$s → %3$s → 目标网站</string>
+    <string name="chain_scope">仅走代理的流量使用此链路，直连和分应用规则仍生效。出口故障不会自动切回中转。订阅更新若替换节点，请重新选择。</string>
+    <string name="chain_empty">此分组没有可用中转节点，请先导入 VLESS、Shadowsocks 或 SOCKS 等节点。</string>
+    <string name="chain_save">保存并选中中转节点</string>
+    <string name="chain_saving">保存中…</string>
+    <string name="chain_saved">已保存。返回首页连接；如果正在连接，请先断开再重新连接。</string>
+    <string name="chain_reload">刷新节点列表</string>
+    <string name="chain_back">返回首页</string>
+    <string name="chain_error_missing">链式代理已阻止连接：节点已删除或被替换，请在链式代理中重新选择。</string>
+    <string name="chain_error_ambiguous">节点别名不存在或重名，请在链式代理中明确选择节点。</string>
+    <string name="chain_error_fragment">请先关闭分片模式，再使用链式代理。</string>
+    <string name="chain_error_unsupported">链式代理支持 VLESS、VMess、Shadowsocks、SOCKS、HTTP 和 Trojan，当前节点类型不支持。</string>
+    <string name="chain_error_endpoint">链式节点的地址或端口无效，请先编辑节点。</string>
+    <string name="chain_error_exit">请先选择静态出口节点。</string>
+    <string name="chain_error_loop">中转、出口和前置代理不能使用同一个节点。</string>
+    <string name="chain_error_balance">智能选择暂不支持保留此链路，请直接选择中转节点连接。</string>
+    <string name="chain_error_group">分组已变化或被删除，请刷新后重新选择。</string>
+    <string name="chain_error_entry">请先选择有效的中转节点。</string>
+    <string name="chain_error_load">读取节点失败，请刷新重试。</string>
+    <string name="chain_error_save">保存失败，请重新打开页面检查设置后重试。</string>
+</resources>

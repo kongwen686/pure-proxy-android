@@ -1,0 +1,83 @@
+{
+  "upstream_app": "https://github.com/2dust/v2rayNG/releases/tag/1.10.32",
+  "apk_sha256": "ef03fe7d8de41e78653d6982a62a0d5ab29a1750f795962bc2133aac812e32c0",
+  "native_extraction": [
+    {
+      "path": "V2rayNG/app/libs/arm64-v8a/libhev-socks5-tunnel.so",
+      "sha256": "6b6987f2560275eead911d39e3bd6ab52bd59ea8789d3972e0e7feed8927b084"
+    },
+    {
+      "path": "V2rayNG/app/libs/arm64-v8a/libhysteria2.so",
+      "sha256": "c4f8111f3b89c1fdc3fc690a8b7c1a9c49550b29bba8573c264dd1fdf942415f"
+    },
+    {
+      "path": "V2rayNG/app/libs/arm64-v8a/libtun2socks.so",
+      "sha256": "ecd1ea61db76a3bd3fd0c9f91ddad5248ad932a1c57a9ca71174a09137d91123"
+    },
+    {
+      "path": "V2rayNG/app/libs/armeabi-v7a/libhev-socks5-tunnel.so",
+      "sha256": "44ad5963e0e2cbf35bd6013354ad9f0ca70252e4d9dc114999bb56b487319df5"
+    },
+    {
+      "path": "V2rayNG/app/libs/armeabi-v7a/libhysteria2.so",
+      "sha256": "035b24333a22500075964603e8f6a948a19878a5778496c7792c6b37df3edef9"
+    },
+    {
+      "path": "V2rayNG/app/libs/armeabi-v7a/libtun2socks.so",
+      "sha256": "37e8fc0440a1329fc9622e91b4965bb0e16ff841b1b9d8f03e3687e0f9d3e975"
+    },
+    {
+      "path": "V2rayNG/app/libs/x86/libhev-socks5-tunnel.so",
+      "sha256": "b582326c0adfbd1abc6b29428f1d1a33d74729eff0251f6985a0a9be4b95c9e7"
+    },
+    {
+      "path": "V2rayNG/app/libs/x86/libhysteria2.so",
+      "sha256": "1b8f6ffd1ad409be1526c55d2484ac0dace602ed1a101f34ca8656644f2f450e"
+    },
+    {
+      "path": "V2rayNG/app/libs/x86/libtun2socks.so",
+      "sha256": "015baa47c8f40cabd9b4876156b89a7b1d62a08672b123aff0d34ab9191745bd"
+    },
+    {
+      "path": "V2rayNG/app/libs/x86_64/libhev-socks5-tunnel.so",
+      "sha256": "29b1df3b09ed2a43dc6aea7911a8ea02951093f8f22733b7d76a03a6690fbeef"
+    },
+    {
+      "path": "V2rayNG/app/libs/x86_64/libhysteria2.so",
+      "sha256": "4c18f6af26997b002327721c6ab60f3cd3d74f6d9f137232744c1909dc774b70"
+    },
+    {
+      "path": "V2rayNG/app/libs/x86_64/libtun2socks.so",
+      "sha256": "426e4af5c00f8accb6613f370bdf8898209891347210ef9f90452a6a9e4429cc"
+    }
+  ],
+  "xray_aar_release": "https://github.com/2dust/AndroidLibXrayLite/releases/tag/v25.12.2",
+  "xray_aar_sha256": "9c43748373cc9ef03ff020764ea4ea95185f901e17a61a090bda26fa3c9e4a07",
+  "upstream_commit": "f85c382dbdf9c057c0bce7bc6ec184672abb9607",
+  "source_gitlinks": {
+    "AndroidLibXrayLite": "29e5a05161842f62f2dfecbb6796be08327c004b",
+    "badvpn": "e68480088a48c8930d29f54e30e9d6deaaf32c47",
+    "hev-socks5-tunnel": "4682d7983c600dc702f33759f0250c96f54a0f2c",
+    "hysteria": "55e70a5f446fb4002f721de0b32bae6d6b03f164",
+    "libancillary": "232d69a5ebb4461b572bd3f3b97088091e01c243"
+  },
+  "native_build_mode": "Prebuilt native binaries from upstream official releases; Kotlin and Android resources are rebuilt locally.",
+  "routing_assets": [
+    {
+      "path": "V2rayNG/app/src/main/assets/geoip.dat",
+      "sha256": "bfa24c05bca81164fe859f26ff6db8bd7195d2faf775c2ff374c4b4fadbea479",
+      "source": "Pinned upstream official APK"
+    },
+    {
+      "path": "V2rayNG/app/src/main/assets/geosite.dat",
+      "sha256": "3ed1a104071726469305a55b40d7d79300720eb15fcbb0845248498c2eb6d025",
+      "source": "Pinned upstream official APK"
+    }
+  ],
+  "xray_aar_source_commit": "29e5a05161842f62f2dfecbb6796be08327c004b",
+  "xray_aar_source_url": "https://github.com/2dust/AndroidLibXrayLite/tree/29e5a05161842f62f2dfecbb6796be08327c004b",
+  "xray_compatibility_note": "Uses the single-argument StartLoop API expected by v2rayNG 1.10.32. The native source worktree is pinned to the AAR release source revision.",
+  "upstream_apk_url": "https://github.com/2dust/v2rayNG/releases/download/1.10.32/v2rayNG_1.10.32_universal.apk",
+  "xray_aar_url": "https://github.com/2dust/AndroidLibXrayLite/releases/download/v25.12.2/libv2ray.aar",
+  "source_publication_note": "The public source snapshot pins AndroidLibXrayLite to the corresponding AAR source revision. Generated AAR/SO/DAT files are fetched and checksum-verified, never committed."
+}
