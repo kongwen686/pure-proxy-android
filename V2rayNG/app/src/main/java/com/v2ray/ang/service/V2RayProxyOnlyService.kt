@@ -8,6 +8,7 @@ import android.os.IBinder
 import androidx.annotation.RequiresApi
 import com.v2ray.ang.handler.SettingsManager
 import com.v2ray.ang.handler.V2RayServiceManager
+import com.v2ray.ang.handler.NotificationManager
 import com.v2ray.ang.util.MyContextWrapper
 import java.lang.ref.SoftReference
 
@@ -28,8 +29,14 @@ class V2RayProxyOnlyService : Service(), ServiceControl {
      * @return The start mode.
      */
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        V2RayServiceManager.startCoreLoop()
-        return START_STICKY
+        try {
+            NotificationManager.showNotification(null)
+            if (V2RayServiceManager.isRunning() || V2RayServiceManager.startCoreLoop()) return START_STICKY
+        } catch (e: Exception) {
+            android.util.Log.e(com.v2ray.ang.AppConfig.TAG, "Failed to start proxy service", e)
+        }
+        stopSelf()
+        return START_NOT_STICKY
     }
 
     /**
@@ -58,7 +65,7 @@ class V2RayProxyOnlyService : Service(), ServiceControl {
     /**
      * Stops the service.
      */
-    override fun stopService() {
+    override fun stopService(reason: VpnStopReason) {
         stopSelf()
     }
 

@@ -16,6 +16,7 @@ import com.v2ray.ang.extension.toast
 import com.v2ray.ang.service.ServiceControl
 import com.v2ray.ang.service.V2RayProxyOnlyService
 import com.v2ray.ang.service.V2RayVpnService
+import com.v2ray.ang.service.VpnStopReason
 import com.v2ray.ang.util.MessageUtil
 import com.v2ray.ang.handler.PluginServiceManager
 import com.v2ray.ang.util.Utils
@@ -294,7 +295,7 @@ object V2RayServiceManager {
         override fun shutdown(): Long {
             val serviceControl = serviceControl?.get() ?: return -1
             return try {
-                serviceControl.stopService()
+                serviceControl.stopService(VpnStopReason.CORE_STOPPED)
                 0
             } catch (e: Exception) {
                 Log.e(AppConfig.TAG, "Failed to stop service in callback", e)
@@ -345,12 +346,12 @@ object V2RayServiceManager {
 
                 AppConfig.MSG_STATE_STOP -> {
                     Log.i(AppConfig.TAG, "Stop Service")
-                    serviceControl.stopService()
+                    serviceControl.stopService(VpnStopReason.USER_STOP)
                 }
 
                 AppConfig.MSG_STATE_RESTART -> {
                     Log.i(AppConfig.TAG, "Restart Service")
-                    serviceControl.stopService()
+                    serviceControl.stopService(VpnStopReason.USER_RESTART)
                     Thread.sleep(500L)
                     startVService(serviceControl.getService())
                 }

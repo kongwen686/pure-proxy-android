@@ -11,6 +11,8 @@ import android.net.NetworkRequest
 import android.net.ProxyInfo
 import android.net.VpnService
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.os.ParcelFileDescriptor
 import android.os.StrictMode
 import android.util.Log
@@ -22,14 +24,17 @@ import com.v2ray.ang.handler.MmkvManager
 import com.v2ray.ang.handler.NotificationManager
 import com.v2ray.ang.handler.SettingsManager
 import com.v2ray.ang.handler.V2RayServiceManager
+import com.v2ray.ang.handler.VpnSessionDiagnostics
 import com.v2ray.ang.util.MyContextWrapper
 import com.v2ray.ang.util.Utils
 import java.lang.ref.SoftReference
 
 class V2RayVpnService : VpnService(), ServiceControl {
     private lateinit var mInterface: ParcelFileDescriptor
-    private var isRunning = false
+    @Volatile private var isRunning = false
     private var tun2SocksService: Tun2SocksControl? = null
+    private val lifecycle = VpnLifecycle()
+    private val mainHandler = Handler(Looper.getMainLooper())
 
     /**destroy
      * Unfortunately registerDefaultNetworkCallback is going to return our VPN interface: https://android.googlesource.com/platform/frameworks/base/+/dda156ab0c5d66ad82bdcf76cda07cbc0a9c8a2e
@@ -76,7 +81,8 @@ class V2RayVpnService : VpnService(), ServiceControl {
     }
 
     override fun onRevoke() {
-        stopV2Ray()
+        // Android may revoke VPN authorization from a Binder thread.
+        stopService(VpnStopReason.VPN_REVOKED)
     }
 
 //    override fun onLowMemory() {
@@ -85,16 +91,31 @@ class V2RayVpnService : VpnService(), ServiceControl {
 //    }
 
     override fun onDestroy() {
+        stopV2Ray(VpnStopReason.SERVICE_DESTROYED, stopServiceInstance = false)
+        mainHandler.removeCallbacksAndMessages(null)
         super.onDestroy()
-        NotificationManager.cancelNotification()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (V2RayServiceManager.startCoreLoop()) {
-            startService()
+        if (!lifecycle.beginStart()) {
+            return if (lifecycle.phase == VpnLifecycle.Phase.CONNECTED) START_STICKY else START_NOT_STICKY
         }
-        return START_STICKY
-        //return super.onStartCommand(intent, flags, startId)
+        try {
+            // Promote before config generation and native startup, including sticky restarts.
+            NotificationManager.showNotification(null)
+            VpnSessionDiagnostics.record("STARTING")
+            if (V2RayServiceManager.startCoreLoop()) {
+                startService()
+                if (isRunning && lifecycle.connected()) {
+                    VpnSessionDiagnostics.record("CONNECTED")
+                    return START_STICKY
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(AppConfig.TAG, "Failed to start VPN session", e)
+        }
+        stopV2Ray(VpnStopReason.START_FAILED)
+        return START_NOT_STICKY
     }
 
     override fun getService(): Service {
@@ -105,8 +126,10 @@ class V2RayVpnService : VpnService(), ServiceControl {
         setupService()
     }
 
-    override fun stopService() {
-        stopV2Ray(true)
+    override fun stopService(reason: VpnStopReason) {
+        // Native shutdown callbacks may arrive on a worker thread.
+        if (Looper.myLooper() == Looper.getMainLooper()) stopV2Ray(reason)
+        else mainHandler.post { stopV2Ray(reason) }
     }
 
     override fun vpnProtect(socket: Int): Boolean {
@@ -128,6 +151,7 @@ class V2RayVpnService : VpnService(), ServiceControl {
     private fun setupService() {
         val prepare = prepare(this)
         if (prepare != null) {
+            stopV2Ray(VpnStopReason.VPN_REVOKED)
             return
         }
 
@@ -168,7 +192,7 @@ class V2RayVpnService : VpnService(), ServiceControl {
             return true
         } catch (e: Exception) {
             Log.e(AppConfig.TAG, "Failed to establish VPN interface", e)
-            stopV2Ray()
+            stopV2Ray(VpnStopReason.START_FAILED)
         }
         return false
     }
@@ -295,35 +319,41 @@ class V2RayVpnService : VpnService(), ServiceControl {
      * Starts the tun2socks process with the appropriate parameters.
      */
     private fun runTun2socks() {
+        if (!isRunning) return
         if (MmkvManager.decodeSettingsBool(AppConfig.PREF_USE_HEV_TUNNEL, true) == true) {
             tun2SocksService = TProxyService(
                 context = applicationContext,
                 vpnInterface = mInterface,
                 isRunningProvider = { isRunning },
-                restartCallback = { runTun2socks() }
+                restartCallback = { restartTunnelIfRunning() }
             )
         } else {
             tun2SocksService = Tun2SocksService(
                 context = applicationContext,
                 vpnInterface = mInterface,
                 isRunningProvider = { isRunning },
-                restartCallback = { runTun2socks() }
+                restartCallback = { restartTunnelIfRunning() }
             )
         }
 
         tun2SocksService?.startTun2Socks()
     }
 
+    private fun restartTunnelIfRunning() {
+        mainHandler.post {
+            if (isRunning && lifecycle.phase == VpnLifecycle.Phase.CONNECTED) runTun2socks()
+        }
+    }
+
     /**
      * Stops the V2Ray service.
-     * @param isForced Whether to force stop the service.
+     * @param stopServiceInstance False only when Android is already destroying this instance.
      */
-    private fun stopV2Ray(isForced: Boolean = true) {
-//        val configName = defaultDPreference.getPrefString(PREF_CURR_CONFIG_GUID, "")
-//        val emptyInfo = VpnNetworkInfo()
-//        val info = loadVpnNetworkInfo(configName, emptyInfo)!! + (lastNetworkInfo ?: emptyInfo)
-//        saveVpnNetworkInfo(configName, info)
+    private fun stopV2Ray(reason: VpnStopReason, stopServiceInstance: Boolean = true) {
+        if (!lifecycle.beginStop(reason)) return
         isRunning = false
+        VpnSessionDiagnostics.record(reason.name)
+        Log.i(AppConfig.TAG, "VPN session stopped: ${reason.name}")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             try {
                 connectivity.unregisterNetworkCallback(defaultNetworkCallback)
@@ -332,25 +362,28 @@ class V2RayVpnService : VpnService(), ServiceControl {
             }
         }
 
-        tun2SocksService?.stopTun2Socks()
+        try {
+            tun2SocksService?.stopTun2Socks()
+        } catch (e: Exception) {
+            Log.e(AppConfig.TAG, "Failed to stop tunnel", e)
+        }
         tun2SocksService = null
 
         V2RayServiceManager.stopCoreLoop()
 
-        if (isForced) {
+        if (stopServiceInstance) {
             //stopSelf has to be called ahead of mInterface.close(). otherwise v2ray core cannot be stooped
             //It's strage but true.
             //This can be verified by putting stopself() behind and call stopLoop and startLoop
             //in a row for several times. You will find that later created v2ray core report port in use
             //which means the first v2ray core somehow failed to stop and release the port.
             stopSelf()
-
-            try {
-                mInterface.close()
-            } catch (e: Exception) {
-                Log.e(AppConfig.TAG, "Failed to close VPN interface", e)
-            }
         }
+        try {
+            if (::mInterface.isInitialized) mInterface.close()
+        } catch (e: Exception) {
+            Log.e(AppConfig.TAG, "Failed to close VPN interface", e)
+        }
+        lifecycle.stopped()
     }
 }
-

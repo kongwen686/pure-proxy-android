@@ -93,6 +93,9 @@
             android:name=".ui.SettingsActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.BackgroundActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.PerAppProxyActivity"
             android:exported="false" />
         <activity

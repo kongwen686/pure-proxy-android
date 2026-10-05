@@ -684,6 +684,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
+            R.id.background_settings -> startActivity(Intent(this, BackgroundActivity::class.java))
             R.id.chain_setting -> startActivity(Intent(this, ChainSettingsActivity::class.java))
             R.id.sub_setting -> requestSubSettingActivity.launch(Intent(this, SubSettingActivity::class.java))
             R.id.per_app_proxy_settings -> startActivity(Intent(this, PerAppProxyActivity::class.java))

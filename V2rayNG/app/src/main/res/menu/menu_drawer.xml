@@ -5,6 +5,10 @@
 
     <group android:id="@+id/group_main">
         <item
+            android:id="@+id/background_settings"
+            android:icon="@drawable/ic_settings_24dp"
+            android:title="@string/background_title" />
+        <item
             android:id="@+id/chain_setting"
             android:icon="@drawable/ic_routing_24dp"
             android:title="@string/chain_title" />

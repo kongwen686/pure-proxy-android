@@ -1,0 +1,34 @@
+<resources>
+    <string name="background_title">Background operation</string>
+    <string name="background_connecting">Starting proxy…</string>
+    <string name="background_connected">Proxy service is running</string>
+    <string name="background_notification_channel">Proxy connection status</string>
+    <string name="background_description">Allow background activity to keep the VPN running when using other apps. System restrictions, another VPN, or a process crash can still end the connection; this page cannot override system settings.</string>
+    <string name="background_battery_status">Battery optimization exemption: %1$s</string>
+    <string name="background_yes">enabled</string>
+    <string name="background_no">not enabled</string>
+    <string name="background_notifications_status">Connection notifications: %1$s</string>
+    <string name="background_notifications_enabled">allowed</string>
+    <string name="background_notifications_disabled">blocked or unavailable</string>
+    <string name="background_battery_button">Battery optimization settings</string>
+    <string name="background_app_button">App settings</string>
+    <string name="background_notification_button">Connection notification settings</string>
+    <string name="background_vpn_button">System VPN settings</string>
+    <string name="background_guide">On Huawei devices, search Settings for App launch. Disable automatic management for Pure Proxy, then allow auto-launch, secondary launch, and background activity. In Battery optimization, select all apps and set Pure Proxy to “Don’t allow” optimization. Disable power saving while testing. You can also lock the app card in Recents.
+For other devices, allow unrestricted battery use and background activity. In system VPN settings, optionally enable Always-on VPN if supported. Only enable “Block connections without VPN” if you accept losing connectivity whenever this VPN stops.</string>
+    <string name="background_last_event">Last VPN record: %1$s — %2$s</string>
+    <string name="background_no_event">No VPN session record yet</string>
+    <string name="background_starting_event">starting</string>
+    <string name="background_connected_event">VPN interface established</string>
+    <string name="background_user_stop">user disconnected</string>
+    <string name="background_user_restart">user restarted</string>
+    <string name="background_revoked">VPN permission revoked or VPN replaced</string>
+    <string name="background_core_stopped">proxy core stopped</string>
+    <string name="background_start_failed">startup failed</string>
+    <string name="background_service_destroyed">service destroyed by Android</string>
+    <string name="background_unknown">unknown event</string>
+    <string name="background_diagnostic_hint">This is the last saved event, not a live connection check. If the VPN icon disappears but the record still says connected, the process may have been killed or crashed without a cleanup callback; it does not prove which cause occurred. Record this page after the next unexpected disconnect, before reconnecting.</string>
+    <string name="background_copy">Copy diagnosis without node information</string>
+    <string name="background_copied">Diagnosis copied</string>
+    <string name="background_settings_missing">This settings page is not available on your device. Open system Settings manually.</string>
+</resources>

@@ -120,8 +120,9 @@ object NotificationManager {
 
         mBuilder = NotificationCompat.Builder(service, channelId)
             .setSmallIcon(R.drawable.ic_stat_name)
-            .setContentTitle(currentConfig?.remarks)
-            .setPriority(NotificationCompat.PRIORITY_MIN)
+            .setContentTitle(currentConfig?.remarks ?: service.getString(R.string.app_name))
+            .setContentText(service.getString(if (currentConfig == null) R.string.background_connecting else R.string.background_connected))
+            .setPriority(NotificationCompat.PRIORITY_LOW)
             .setOngoing(true)
             .setShowWhen(false)
             .setOnlyAlertOnce(true)
@@ -177,14 +178,14 @@ object NotificationManager {
      */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(): String {
-        val channelId = AppConfig.RAY_NG_CHANNEL_ID
-        val channelName = AppConfig.RAY_NG_CHANNEL_NAME
+        // The old channel was created with IMPORTANCE_NONE, which cannot be raised in place.
+        val channelId = "PURE_PROXY_VPN_STATUS_V2"
+        val channelName = getService()?.getString(R.string.background_notification_channel) ?: AppConfig.RAY_NG_CHANNEL_NAME
         val chan = NotificationChannel(
             channelId,
-            channelName, NotificationManager.IMPORTANCE_HIGH
+            channelName, NotificationManager.IMPORTANCE_LOW
         )
         chan.lightColor = Color.DKGRAY
-        chan.importance = NotificationManager.IMPORTANCE_NONE
         chan.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
         getNotificationManager()?.createNotificationChannel(chan)
         return channelId

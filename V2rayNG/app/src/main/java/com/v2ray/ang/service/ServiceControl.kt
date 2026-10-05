@@ -17,7 +17,7 @@ interface ServiceControl {
     /**
      * Stops the service.
      */
-    fun stopService()
+    fun stopService(reason: VpnStopReason = VpnStopReason.USER_STOP)
 
     /**
      * Protects the VPN socket.

@@ -2,23 +2,24 @@
 
 基于 [v2rayNG 1.10.32](https://github.com/2dust/v2rayNG/tree/1.10.32) 的 Android 代理客户端，采用 Xray 内核，增加按分组管理的链式代理设置。应用免费，使用本地二维码识别，不包含广告 SDK、购买或付费解锁。
 
-当前版本：**1.1.1**。Android **7.0+**。本仓库公开客户端源码，不提供代理服务器或节点订阅。
+当前版本：**1.1.2**。Android **7.0+**。本仓库公开客户端源码，不提供代理服务器或节点订阅。
 
 ## 下载安装
 
 在 [Releases 下载页](https://github.com/kongwen686/pure-proxy-android/releases/latest) 获取已签名、可安装的 Release 包：
 
-- [arm64 安装包](https://github.com/kongwen686/pure-proxy-android/releases/download/v1.1.1/pure-proxy-1.1.1-arm64-v8a.apk)：适合大多数现代 Android 手机，体积较小。
-- [通用安装包](https://github.com/kongwen686/pure-proxy-android/releases/download/v1.1.1/pure-proxy-1.1.1-universal.apk)：包含 arm64-v8a、armeabi-v7a、x86、x86_64；不确定架构时选择这个。
+- [arm64 安装包](https://github.com/kongwen686/pure-proxy-android/releases/download/v1.1.2/pure-proxy-1.1.2-arm64-v8a.apk)：适合大多数现代 Android 手机，体积较小。
+- [通用安装包](https://github.com/kongwen686/pure-proxy-android/releases/download/v1.1.2/pure-proxy-1.1.2-universal.apk)：包含 arm64-v8a、armeabi-v7a、x86、x86_64；不确定架构时选择这个。
 - [安装和使用说明](docs/INSTALL_USAGE.md)：包括覆盖升级、扫码导入、连接、链式代理及分应用设置。
 
-1.1.1 使发布包中的配置模板与脱敏公开源码一致，提高安装版本号，并沿用 1.0.0 / 1.1.0 的发布签名。GitHub Actions 的 Debug 构建产物使用测试签名，请使用 Releases 中的 Release 包升级。
+1.1.2 提前将服务提升为前台服务，使用可见的低优先级连接通知，补充幂等退出清理、后台运行设置和仅存本机的退出记录。沿用 1.0.0 / 1.1.0 / 1.1.1 的发布签名，提高安装版本号。此改进不能证明所有意外断开均已解决，设备上的后台限制仍须由用户授权。GitHub Actions 的 Debug 构建产物使用测试签名，请使用 Releases 中的 Release 包升级。
 
 ## 功能
 
 - 导入二维码、二维码图片、剪贴板链接、订阅及手动配置。
 - 支持 Shadowsocks、VLESS/REALITY、VMess、Trojan、SOCKS、HTTP 等上游协议。
 - VPN、分应用代理、自定义路由、DNS、节点测速和流量统计。
+- 后台运行设置入口、电池优化和通知状态、可复制的不含节点信息的 VPN 事件记录。
 - 普通单节点代理；中转 → 出口的两跳链式代理；可选前置节点的三跳链路。
 - 链路按分组保存，以节点 GUID 关联；改名保持关联，节点缺失或出口失败不自动切回中转出口。
 - 删除推广入口，关闭 Android 自动备份，保留作者署名及依赖许可证。
